@@ -8,6 +8,10 @@ class ExampleController {
 
         return $deferred.promise;
     }
+
+    onChange($value: string, $model: INgModelController) {
+        console.log('Value changed: "%s", "%s"', $value, $model.$viewValue);
+    }
 }
 angular
     .module('Example', ['Wysiwyg'])

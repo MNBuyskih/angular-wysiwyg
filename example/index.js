@@ -7,6 +7,9 @@ var ExampleController = (function () {
         message ? $deferred.resolve(message) : $deferred.reject();
         return $deferred.promise;
     };
+    ExampleController.prototype.onChange = function ($value, $model) {
+        console.log('Value changed: "%s", "%s"', $value, $model.$viewValue);
+    };
     return ExampleController;
 }());
 angular

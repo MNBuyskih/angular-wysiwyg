@@ -6,6 +6,7 @@ import IScope = angular.IScope;
 
 class Wysiwyg {
     model: INgModelController;
+    onChange: (args: {$value: string, $model: INgModelController}) => void;
     private $element: HTMLElement;
 
     constructor(private $timeout: ITimeoutService) {
@@ -17,6 +18,10 @@ class Wysiwyg {
 
     setElement($element: HTMLElement) {
         this.$element = $element;
+        this.$element.addEventListener('input', () => {
+            this.model.$setViewValue(this.$element.innerHTML);
+            this.onChange && this.onChange({$value: this.model.$viewValue, $model: this.model});
+        });
     }
 
     $onInit() {
@@ -67,6 +72,7 @@ angular
         controllerAs: 'vm',
         transclude: true,
         require: {model: '^ngModel'},
+        bindings: {onChange: '&'},
         template: `<div ng-transclude class="wysiwyg"></div>`
     })
     .component('wysiwygInput', {

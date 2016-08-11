@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<wysiwyg ng-model="vm.text">
+<wysiwyg ng-model="vm.text" on-change="vm.onChange($value, $model)">
     <wysiwyg-input></wysiwyg-input>
     <hr>
     <button wysiwyg-btn="bold"><strong>B</strong></button>

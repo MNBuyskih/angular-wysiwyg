@@ -6,7 +6,12 @@ var Wysiwyg = (function () {
         document.execCommand(commandName, false, value);
     };
     Wysiwyg.prototype.setElement = function ($element) {
+        var _this = this;
         this.$element = $element;
+        this.$element.addEventListener('input', function () {
+            _this.model.$setViewValue(_this.$element.innerHTML);
+            _this.onChange && _this.onChange({ $value: _this.model.$viewValue, $model: _this.model });
+        });
     };
     Wysiwyg.prototype.$onInit = function () {
         var _this = this;
@@ -47,6 +52,7 @@ angular
     controllerAs: 'vm',
     transclude: true,
     require: { model: '^ngModel' },
+    bindings: { onChange: '&' },
     template: "<div ng-transclude class=\"wysiwyg\"></div>"
 })
     .component('wysiwygInput', {
