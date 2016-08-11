@@ -12,6 +12,8 @@ var Wysiwyg = (function () {
             _this.model.$setViewValue(_this.$element.innerHTML);
             _this.onChange && _this.onChange({ $value: _this.model.$viewValue, $model: _this.model });
         });
+        this.$element.addEventListener('focus', function () { return _this.onFocus && _this.onFocus(); });
+        this.$element.addEventListener('blur', function () { return _this.onBlur && _this.onBlur(); });
     };
     Wysiwyg.prototype.$onInit = function () {
         var _this = this;
@@ -52,7 +54,11 @@ angular
     controllerAs: 'vm',
     transclude: true,
     require: { model: '^ngModel' },
-    bindings: { onChange: '&' },
+    bindings: {
+        onChange: '&',
+        onFocus: '&',
+        onBlur: '&',
+    },
     template: "<div ng-transclude class=\"wysiwyg\"></div>"
 })
     .component('wysiwygInput', {

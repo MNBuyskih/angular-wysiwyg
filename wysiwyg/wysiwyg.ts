@@ -7,6 +7,8 @@ import IScope = angular.IScope;
 class Wysiwyg {
     model: INgModelController;
     onChange: (args: {$value: string, $model: INgModelController}) => void;
+    onFocus: () => void;
+    onBlur: () => void;
     private $element: HTMLElement;
 
     constructor(private $timeout: ITimeoutService) {
@@ -22,6 +24,8 @@ class Wysiwyg {
             this.model.$setViewValue(this.$element.innerHTML);
             this.onChange && this.onChange({$value: this.model.$viewValue, $model: this.model});
         });
+        this.$element.addEventListener('focus', () => this.onFocus && this.onFocus());
+        this.$element.addEventListener('blur', () => this.onBlur && this.onBlur());
     }
 
     $onInit() {
@@ -72,7 +76,11 @@ angular
         controllerAs: 'vm',
         transclude: true,
         require: {model: '^ngModel'},
-        bindings: {onChange: '&'},
+        bindings: {
+            onChange: '&',
+            onFocus: '&',
+            onBlur: '&',
+        },
         template: `<div ng-transclude class="wysiwyg"></div>`
     })
     .component('wysiwygInput', {

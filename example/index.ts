@@ -12,6 +12,14 @@ class ExampleController {
     onChange($value: string, $model: INgModelController) {
         console.log('Value changed: "%s", "%s"', $value, $model.$viewValue);
     }
+
+    onFocus() {
+        console.log('focus');
+    }
+
+    onBlur() {
+        console.log('blur');
+    }
 }
 angular
     .module('Example', ['Wysiwyg'])

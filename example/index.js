@@ -10,6 +10,12 @@ var ExampleController = (function () {
     ExampleController.prototype.onChange = function ($value, $model) {
         console.log('Value changed: "%s", "%s"', $value, $model.$viewValue);
     };
+    ExampleController.prototype.onFocus = function () {
+        console.log('focus');
+    };
+    ExampleController.prototype.onBlur = function () {
+        console.log('blur');
+    };
     return ExampleController;
 }());
 angular
