@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="Example" ng-controller="ExampleController as vm">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<wysiwyg ng-model="vm.text">
+    <wysiwyg-input></wysiwyg-input>
+    <hr>
+    <button wysiwyg-btn="bold"><strong>B</strong></button>
+    <button wysiwyg-btn="italic"><i>I</i></button>
+    <button wysiwyg-btn="underline"><U>U</U></button>
+    <button wysiwyg-btn="createLink" prompt="vm.getHref($deferred)">A</button>
+    <button wysiwyg-btn="insertOrderedList">UL</button>
+    <button wysiwyg-btn="insertUnorderedList">OL</button>
+    <button wysiwyg-btn="removeFormat">Fx</button>
+</wysiwyg>
+
+<script src="../bower_components/angular/angular.min.js"></script>
+<script src="../wysiwyg/wysiwyg.js"></script>
+<script src="index.js"></script>
+</body>
+</html>

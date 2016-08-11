@@ -1,0 +1,25 @@
+{
+  "name": "wysiwyg",
+  "authors": [
+    "MNB <buyskih@gmail.com>"
+  ],
+  "description": "Small and extra functionality WYSIWYG angular based jquery-less editor",
+  "main": "",
+  "keywords": [
+    "angular",
+    "wysiwyg"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "example"
+  ],
+  "dependencies": {
+    "angular": "^1.5.8"
+  }
+}
