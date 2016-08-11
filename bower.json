@@ -1,5 +1,5 @@
 {
-  "name": "wysiwyg",
+  "name": "angular-wysiwyg",
   "authors": [
     "MNB <buyskih@gmail.com>"
   ],
@@ -9,6 +9,7 @@
     "angular",
     "wysiwyg"
   ],
+  "version": "0.01",
   "license": "MIT",
   "homepage": "",
   "ignore": [
