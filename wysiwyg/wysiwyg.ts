@@ -16,6 +16,7 @@ class Wysiwyg {
 
     exec(commandName: string, value?: string) {
         document.execCommand(commandName, false, value);
+        this.focus();
     }
 
     setElement($element: HTMLElement) {
@@ -26,6 +27,11 @@ class Wysiwyg {
         });
         this.$element.addEventListener('focus', () => this.onFocus && this.onFocus());
         this.$element.addEventListener('blur', () => this.onBlur && this.onBlur());
+
+        this.focus();
+    }
+
+    focus() {
         this.$element.focus();
     }
 

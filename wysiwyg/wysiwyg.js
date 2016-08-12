@@ -4,6 +4,7 @@ var Wysiwyg = (function () {
     }
     Wysiwyg.prototype.exec = function (commandName, value) {
         document.execCommand(commandName, false, value);
+        this.focus();
     };
     Wysiwyg.prototype.setElement = function ($element) {
         var _this = this;
@@ -14,6 +15,9 @@ var Wysiwyg = (function () {
         });
         this.$element.addEventListener('focus', function () { return _this.onFocus && _this.onFocus(); });
         this.$element.addEventListener('blur', function () { return _this.onBlur && _this.onBlur(); });
+        this.focus();
+    };
+    Wysiwyg.prototype.focus = function () {
         this.$element.focus();
     };
     Wysiwyg.prototype.$onInit = function () {
