@@ -4,7 +4,6 @@ var Wysiwyg = (function () {
     }
     Wysiwyg.prototype.exec = function (commandName, value) {
         document.execCommand(commandName, false, value);
-        this.focus();
     };
     Wysiwyg.prototype.setElement = function ($element) {
         var _this = this;
@@ -26,6 +25,29 @@ var Wysiwyg = (function () {
             _this.$element.innerHTML = _this.model.$viewValue;
         });
     };
+    Wysiwyg.prototype.saveSelection = function () {
+        if (window.getSelection) {
+            var sel = window.getSelection();
+            if (sel.getRangeAt && sel.rangeCount)
+                return sel.getRangeAt(0);
+        }
+        else if (document['selection'] && document['selection'].createRange) {
+            return document['selection'].createRange();
+        }
+        return null;
+    };
+    Wysiwyg.prototype.restoreSelection = function (range) {
+        if (range) {
+            if (window.getSelection) {
+                var sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+            else if (document['selection'] && range['select']) {
+                range['select']();
+            }
+        }
+    };
     return Wysiwyg;
 }());
 var WysiwygInput = (function () {
@@ -36,21 +58,6 @@ var WysiwygInput = (function () {
         this.wysiwyg.setElement(this.$element.find('div')[0]);
     };
     return WysiwygInput;
-}());
-var WysiwygBtn = (function () {
-    function WysiwygBtn($q) {
-        this.$q = $q;
-    }
-    WysiwygBtn.prototype.exec = function () {
-        var _this = this;
-        if (this.prompt) {
-            this.prompt({ $deferred: this.$q.defer() }).then(function (value) { return _this.wysiwyg.exec(_this.command, value); });
-        }
-        else {
-            this.wysiwyg.exec(this.command);
-        }
-    };
-    return WysiwygBtn;
 }());
 angular
     .module('Wysiwyg', [])
@@ -81,9 +88,14 @@ angular
             $element.on('click', function (e) {
                 e.preventDefault();
                 if ($scope.prompt) {
-                    $scope.prompt({ $deferred: $q.defer() }).then(function (value) { return $wysiwyg.exec($scope.command, value); });
+                    var selRange_1 = $wysiwyg.saveSelection();
+                    $scope.prompt({ $deferred: $q.defer() }).then(function (value) {
+                        $wysiwyg.restoreSelection(selRange_1);
+                        $wysiwyg.exec($scope.command, value);
+                    });
                 }
                 else {
+                    $wysiwyg.focus();
                     $wysiwyg.exec($scope.command);
                 }
             });

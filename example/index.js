@@ -1,11 +1,28 @@
 var ExampleController = (function () {
-    function ExampleController() {
+    function ExampleController($timeout) {
+        this.$timeout = $timeout;
         this.text = 'Lorem Impsum';
+        this.showHref = false;
     }
     ExampleController.prototype.getHref = function ($deferred) {
-        var message = prompt('href?', 'http://');
-        message ? $deferred.resolve(message) : $deferred.reject();
+        var _this = this;
+        if (this.showHref)
+            return $deferred.promise;
+        this.$timeout(function () { return _this.showHref = true; });
+        this.$defer = $deferred;
         return $deferred.promise;
+    };
+    ExampleController.prototype.submitHref = function () {
+        if (this.$defer)
+            this.$defer.resolve(this.href);
+        this.showHref = false;
+        this.href = '';
+    };
+    ExampleController.prototype.cancelHref = function () {
+        if (this.$defer)
+            this.$defer.reject();
+        this.showHref = false;
+        this.href = '';
     };
     ExampleController.prototype.onChange = function ($value, $model) {
         console.log('Value changed: "%s", "%s"', $value, $model.$viewValue);

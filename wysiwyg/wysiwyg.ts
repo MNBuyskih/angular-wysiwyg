@@ -16,7 +16,6 @@ class Wysiwyg {
 
     exec(commandName: string, value?: string) {
         document.execCommand(commandName, false, value);
-        this.focus();
     }
 
     setElement($element: HTMLElement) {
@@ -40,6 +39,29 @@ class Wysiwyg {
             this.$element.innerHTML = this.model.$viewValue
         });
     }
+
+    saveSelection(): Range {
+        if (window.getSelection) {
+            let sel = window.getSelection();
+            if (sel.getRangeAt && sel.rangeCount) return sel.getRangeAt(0);
+        } else if (document['selection'] && document['selection'].createRange) {
+            return document['selection'].createRange();
+        }
+
+        return null;
+    }
+
+    restoreSelection(range: Range) {
+        if (range) {
+            if (window.getSelection) {
+                let sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            } else if (document['selection'] && range['select']) {
+                range['select']();
+            }
+        }
+    }
 }
 
 class WysiwygInput {
@@ -52,28 +74,6 @@ class WysiwygInput {
     $onInit() {
         this.wysiwyg.setElement(this.$element.find('div')[0]);
     }
-}
-
-class WysiwygBtn {
-    wysiwyg: Wysiwyg;
-    protected command: string;
-    protected prompt: (args: {$deferred: IDeferred<string>}) => IPromise<string>;
-
-    constructor(public $q: IQService) {
-    }
-
-    exec() {
-        if (this.prompt) {
-            this.prompt({$deferred: this.$q.defer()}).then((value) => this.wysiwyg.exec(this.command, value));
-        } else {
-            this.wysiwyg.exec(this.command);
-        }
-    }
-}
-
-interface WysiwygBtnScope extends IScope {
-    command: string;
-    prompt: ($deferred: IDeferred<string>)=>IPromise<string>;
 }
 
 angular
@@ -106,8 +106,13 @@ angular
                     e.preventDefault();
 
                     if ($scope.prompt) {
-                        $scope.prompt({$deferred: $q.defer()}).then((value) => $wysiwyg.exec($scope.command, value));
+                        let selRange = $wysiwyg.saveSelection();
+                        $scope.prompt({$deferred: $q.defer()}).then((value) => {
+                            $wysiwyg.restoreSelection(selRange);
+                            $wysiwyg.exec($scope.command, value);
+                        });
                     } else {
+                        $wysiwyg.focus();
                         $wysiwyg.exec($scope.command);
                     }
                 });
