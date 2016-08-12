@@ -26,6 +26,7 @@ class Wysiwyg {
         });
         this.$element.addEventListener('focus', () => this.onFocus && this.onFocus());
         this.$element.addEventListener('blur', () => this.onBlur && this.onBlur());
+        this.$element.focus();
     }
 
     $onInit() {

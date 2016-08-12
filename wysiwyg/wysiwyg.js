@@ -14,6 +14,7 @@ var Wysiwyg = (function () {
         });
         this.$element.addEventListener('focus', function () { return _this.onFocus && _this.onFocus(); });
         this.$element.addEventListener('blur', function () { return _this.onBlur && _this.onBlur(); });
+        this.$element.focus();
     };
     Wysiwyg.prototype.$onInit = function () {
         var _this = this;
